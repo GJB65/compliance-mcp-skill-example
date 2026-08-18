@@ -2,7 +2,7 @@
 
 A minimal, working example of an AI agent skill that uses the [TheArtOfService Compliance MCP](https://api.theartofservice.com/mcp) as its source-grounded knowledge layer.
 
-This is a **reference implementation**. Clone it, swap the framework name to whatever your agent needs, plug it into Claude / GPT / Copilot / your own agent runtime. Apache 2.0 licensed, no strings attached.
+Two working examples: one for compliance research, one for the course catalogue. This is a **reference implementation**. Clone it, swap the framework name to whatever your agent needs, plug it into Claude / GPT / Copilot / your own agent runtime. Apache 2.0 licensed, no strings attached.
 
 ## What this does
 
@@ -24,9 +24,10 @@ Your agent provides the **tribal knowledge** layer (the organization's specific 
 
 ## Stats
 
-- 718 compliance frameworks
+- 723 compliance frameworks
 - 20,400+ controls
 - 332,000+ cross-framework mappings
+- 314,000+ courses in the catalogue, searchable without a key
 - 28,586+ controls carry structured auditor evidence requirements
 - Source-grounded, version-tagged, refreshed weekly
 
@@ -46,6 +47,41 @@ The script will print a Markdown brief to stdout. Redirect it to a file or pipe 
 ```bash
 python run.py "ISO 27001:2022" > iso_27001_brief.md
 ```
+
+## Second example: the course catalogue
+
+`run.py` answers *what does this framework require*. `find_courses.py` answers the other
+half: *what can the user actually do about it*.
+
+```bash
+python find_courses.py "soc 2 evidence collection"
+python find_courses.py "first 90 days as CISO" --framework "ISO 27001"
+python find_courses.py --overlap "SOC 2,ISO 27001"
+python find_courses.py --frameworks
+```
+
+**No API key needed.** The four catalogue tools are free and unmetered, because they exist
+to help a buyer find the right course rather than to meter access to data.
+
+The interesting one is `--overlap`. A plain product listing cannot answer "we are running
+SOC 2 and ISO 27001 at the same time, what covers both", because that is a join, not a
+search. An organisation in that position does not want one course per standard, it wants
+the overlap:
+
+```
+# Courses covering SOC 2,ISO 27001 together
+
+### SOC 2 Type 2 Security controls in ISO 27001
+- Price: $299.00 USD
+- Covers: ISO 27001, SOC 2
+- Buy: https://store.theartofservice.com/...
+```
+
+When nothing covers the whole combination, it says so and reports what exists per standard
+rather than returning an empty list.
+
+Link buyers to the `buy_url` field. It carries attribution, which is how the catalogue
+knows an agent produced the sale.
 
 ## Get an API key
 
@@ -67,6 +103,10 @@ This example hits the public REST agent API. The same data is available via the 
 | `GET /api/agent/frameworks/{name}` | Framework metadata |
 | `GET /api/agent/frameworks/{name}/controls` | All controls in the framework |
 | `GET /api/agent/controls/{code}` | Full control detail including evidence_requirements |
+| `GET /api/agent/courses` | Search the course catalogue (free, no key) |
+| `GET /api/agent/courses-for-frameworks` | Courses covering two or more standards together |
+| `GET /api/agent/courses/{product_id}` | Full detail for one course |
+| `GET /api/agent/course-frameworks` | Standards covered, with course counts |
 
 Full tool catalog: [compliance.theartofservice.com/developers](https://compliance.theartofservice.com/developers)
 
