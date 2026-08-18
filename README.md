@@ -1,6 +1,10 @@
 # Compliance MCP Skill Example
 
+[![smithery badge](https://smithery.ai/badge/theartofservice/compliance-intelligence)](https://smithery.ai/servers/theartofservice/compliance-intelligence)
+
 A minimal, working example of an AI agent skill that uses the [TheArtOfService Compliance MCP](https://api.theartofservice.com/mcp) as its source-grounded knowledge layer.
+
+The hosted server is listed on [Smithery](https://smithery.ai/servers/theartofservice/compliance-intelligence) and in the [official MCP registry](https://registry.modelcontextprotocol.io/v0/servers?search=theartofservice) as `com.theartofservice/compliance-intelligence`. Endpoint: `https://api.theartofservice.com/mcp` (streamable HTTP, anonymous access).
 
 Two working examples: one for compliance research, one for the course catalogue. This is a **reference implementation**. Clone it, swap the framework name to whatever your agent needs, plug it into Claude / GPT / Copilot / your own agent runtime. Apache 2.0 licensed, no strings attached.
 
